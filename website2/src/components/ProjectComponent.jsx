@@ -23,11 +23,10 @@ const CustomComponent = ({
       }}
     >
       {/* <CardMedia component="img" image={imageUrl + ".png"} alt={imageUrl} /> */}
-      <Typography variant="h5">{title}</Typography>
-      <Typography variant="body1">{description}</Typography>
-      <Link href={linkUrl} target="_blank">
-        Visit Link
+      <Link href={linkUrl} target="_blank" sx={{ color: "black" }}>
+        <Typography variant="h5">{title}</Typography>
       </Link>
+      <Typography variant="body1">{description}</Typography>
     </Card>
   );
 };

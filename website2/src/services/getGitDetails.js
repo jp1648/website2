@@ -18,7 +18,7 @@ let out = [];
 export const getGitDetails = async (username = "jp1648") => {
   try {
     let { data } = await axiosInstance.get(`/users/${username}/repos`);
-
+    let id = 0;
     data.map((project) => {
       if (
         project.name !== "jp1648" &&
@@ -26,10 +26,12 @@ export const getGitDetails = async (username = "jp1648") => {
         project.name.toLowerCase() !== "website2"
       ) {
         out.push({
+          id: id,
           name: project.name,
           description: project.description,
           url: project.html_url,
         });
+        id++;
       }
     });
     return out;

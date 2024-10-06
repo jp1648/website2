@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useMemo, createRef } from "react";
 import "./App.css";
 import { ReactTyped } from "react-typed";
 import { Container, Typography, Box, Button } from "@mui/material";
@@ -11,7 +11,6 @@ import profilePic from "./assets/profile-pic.png";
 import TechnologyGrid from "./components/GridComponent";
 import CustomComponent from "./components/ProjectComponent";
 import { getGitDetails } from "./services/getGitDetails.js";
-
 const theme = createTheme({
   palette: {
     primary: {
@@ -41,21 +40,7 @@ const floatInFromLeftVariants = {
 
 function App() {
   const [projects, setProjects] = useState([]);
-
-  const [techStackTitleRef, techStackTitleInView] = useInView({
-    triggerOnce: true,
-    threshold: 0.75,
-  });
-
-  const [techIconsRef, techIconsInView] = useInView({
-    triggerOnce: true,
-    threshold: 0.25,
-  });
-
-  const [projectTitleRef, projectTitleInView] = useInView({
-    triggerOnce: true,
-    threshold: 0.25,
-  });
+  const [inViewProjects, setInViewProjects] = useState({});
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -65,6 +50,75 @@ function App() {
 
     fetchProjects();
   }, []);
+
+  const refsById = useMemo(() => {
+    const refs = {};
+    projects.forEach((item) => {
+      refs[item.id] = createRef(null);
+    });
+    return refs;
+  }, [projects]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const { id } = entry.target.dataset;
+
+          // Only set to true the first time it becomes visible
+          if (entry.isIntersecting) {
+            setInViewProjects((prev) => ({
+              ...prev,
+              [id]: true, // Mark the project as viewed
+            }));
+          }
+        });
+      },
+      { threshold: 0.75 }
+    );
+
+    Object.values(refsById).forEach((ref) => {
+      if (ref.current) {
+        observer.observe(ref.current);
+      }
+    });
+
+    return () => {
+      Object.values(refsById).forEach((ref) => {
+        if (ref.current) {
+          observer.unobserve(ref.current);
+        }
+      });
+    };
+  }, [refsById]);
+
+  const [techStackTitleRef, techStackTitleInView] = useInView({
+    triggerOnce: true,
+    threshold: 0.75,
+  });
+
+  const [techIconsRef, techIconsInView] = useInView({
+    triggerOnce: true,
+    threshold: 0.5,
+  });
+
+  const [projectTitleRef, projectTitleInView] = useInView({
+    triggerOnce: true,
+    threshold: 0.5,
+  });
+
+  const [experienceTitleRef, experienceTitleInView] = useInView({
+    triggerOnce: true,
+    threshold: 0.5,
+  });
+
+  const [experienceDetails, experienceDetailsInView] = useInView({
+    triggerOnce: true,
+    threshold: 0.5,
+  });
+
+  const reactTypedRefDescription = useRef(null);
+  const [startTyping, setStartTyping] = useState(false);
 
   return (
     <ThemeProvider theme={theme}>
@@ -227,7 +281,7 @@ function App() {
                 initial="hidden"
                 animate={techIconsInView ? "visible" : "hidden"}
                 variants={floatUpVariants}
-                transition={{ duration: 1 }}
+                transition={{ duration: 1, delay: 0.3 }}
               >
                 <TechnologyGrid />
               </motion.div>
@@ -260,29 +314,84 @@ function App() {
               }}
             >
               {projects.map((project, index) => {
+                const ref = refsById[project.id];
+                const isVisible = inViewProjects[project.id]; // Check if the project is already viewed
+
                 return (
-                  // <motion.div
-                  //   initial="hidden"
-                  //   animate={inView ? "visible" : "hidden"}
-                  //   variants={
-                  //     index % 2 === 0
-                  //       ? floatInFromLeftVariants
-                  //       : floatInFromRightVariants
-                  //   }
-                  //   transition={{ duration: 1 }}
-                  // >
-                  <Box key={index} sx={{ marginBottom: "50px" }}>
-                    <CustomComponent
-                      // imageUrl={imageUrl}
-                      title={project.name}
-                      description={project.description}
-                      linkUrl={project.url}
-                      isRight={index % 2 === 0}
-                    />
-                  </Box>
-                  // </motion.div>
+                  <motion.div
+                    key={index}
+                    ref={ref}
+                    data-id={project.id}
+                    initial="hidden"
+                    animate={isVisible ? "visible" : "hidden"} // Animate only if it's the first time in view
+                    variants={
+                      index % 2 === 0
+                        ? floatInFromRightVariants
+                        : floatInFromLeftVariants
+                    }
+                    transition={{ duration: 1, delay: index * 0.2 }}
+                  >
+                    <Box sx={{ marginBottom: "50px" }}>
+                      <CustomComponent
+                        title={project.name}
+                        description={project.description}
+                        linkUrl={project.url}
+                        isRight={index % 2 === 0}
+                      />
+                    </Box>
+                  </motion.div>
                 );
               })}
+            </Box>
+          </Box>
+          <Box
+            component="section"
+            id="experience"
+            className="experience-section"
+            sx={{ marginTop: "100px", textAlign: "center" }}
+          >
+            <Box
+              component="h1"
+              id="experience-title"
+              className="experience-title"
+              sx={{ textAlign: "center" }}
+            >
+              <motion.h2
+                ref={experienceTitleRef}
+                initial="hidden"
+                animate={experienceTitleInView ? "visible" : "hidden"}
+                variants={floatUpVariants}
+                transition={{ duration: 1 }}
+                onAnimationComplete={() => {
+                  setStartTyping(true);
+                }}
+              >
+                <Typography variant="h2" className="subheader">
+                  My Experience
+                </Typography>
+              </motion.h2>
+            </Box>
+            <Box sx={{ marginTop: "25px" }}>
+              <Typography
+                variant="p"
+                className="desc-subheader-text"
+                sx={{
+                  whiteSpace: "normal",
+                  maxWidth: "300px",
+                  height: "25px",
+                }}
+              >
+                {startTyping && (
+                  <ReactTyped
+                    strings={[
+                      "I’m always diving into tech, soaking up everything from full-stack development to machine learning, data science, and product. Tech is my playground, and I’m stoked to keep making things smarter and better for everyone.",
+                    ]}
+                    typeSpeed={7}
+                    loop={false}
+                    showCursor={false}
+                  />
+                )}
+              </Typography>
             </Box>
           </Box>
         </Box>
