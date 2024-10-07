@@ -42,9 +42,34 @@ function App() {
   const [projects, setProjects] = useState([]);
   const [inViewProjects, setInViewProjects] = useState({});
   const [experienceText, setExperienceText] = useState(
-    <Box margin="30px"></Box>
+    <ul>
+      <li>
+        <span style={{ color: "white" }}>August 2024 - Current</span>
+        <br />
+        Software Engineer @ Lantern (Series A)
+      </li>
+      <br />
+      <li>
+        <span style={{ color: "white" }}>July 2022 - August 2024</span>
+        <br />
+        Software Engineer @ General Motors
+      </li>
+      <br />
+      <li>
+        <span style={{ color: "white" }}>July 2023 - December 2023</span>
+        <br />
+        Technical Product Owner @ General Motors
+      </li>
+      <br />
+      <li>
+        <span style={{ color: "white" }}>June 2021 - August 2021</span>
+        <br />
+        Data Analytics Intern @ Discover Financial Services
+      </li>
+    </ul>
   );
   const [buttonsVisible, setButtonsVisible] = useState(false);
+  const [expDescVisible, setExpDescVisible] = useState(false);
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -124,7 +149,7 @@ function App() {
     triggerOnce: true,
     threshold: 1.0,
   });
-  const [extendedAboutMe, extendedAboutMeInAction] = useInView({
+  const [extendedAboutMe, extendedAboutMeInView] = useInView({
     triggerOnce: true,
     threshold: 1.0,
   });
@@ -134,7 +159,11 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CursorifyProvider cursor={<CustomCursor />}>
-        <Box component="header" className="App-header">
+        <Box
+          component="header"
+          className="App-header"
+          sx={{ paddingTop: "25px" }}
+        >
           <motion.header
             initial="hidden"
             animate="visible"
@@ -150,7 +179,11 @@ function App() {
             </Typography>
           </motion.header>
         </Box>
-        <Box component="div" className="main-screen">
+        <Box
+          component="div"
+          className="main-screen"
+          sx={{ paddingBottom: "100px" }}
+        >
           <Box
             component="section"
             className="about-me"
@@ -359,7 +392,10 @@ function App() {
             component="section"
             id="experience"
             className="experience-section"
-            sx={{ marginTop: "100px", textAlign: "center" }}
+            sx={{
+              marginTop: "100px",
+              textAlign: "center",
+            }}
           >
             <Box
               component="h1"
@@ -527,41 +563,46 @@ function App() {
                   </motion.button>
                 </Box>
               )}
-              <Box
-                sx={{
-                  marginTop: "30px",
-                  height: "100px",
-                  marginBottom: "15px",
-                }}
-              >
-                <motion.p
-                  // initial="hidden"
-                  ref={expDesc}
-                  animate={expDescInView ? "visible" : "hidden"}
-                  variants={floatUpVariants}
-                  transition={{ duration: 1 }}
+
+              {buttonsVisible && (
+                <Box
+                  sx={{
+                    marginTop: "30px",
+                    marginBottom: "150px",
+                  }}
                 >
-                  <p>
-                    <Typography component="body">{experienceText}</Typography>
-                  </p>
-                </motion.p>
+                  <motion.p
+                    // initial="hidden"
+                    ref={expDesc}
+                    animate={expDescInView ? "visible" : "hidden"}
+                    variants={floatUpVariants}
+                    transition={{ duration: 1 }}
+                    onAnimationComplete={() => setExpDescVisible(true)}
+                  >
+                    <p>
+                      <Typography component="body">{experienceText}</Typography>
+                    </p>
+                  </motion.p>
+                </Box>
+              )}
+            </Box>
+            {buttonsVisible && expDescVisible && (
+              <Box className="extended-about" sx={{}}>
+                <Box className="extended-about-me-text-header" sx={{}}>
+                  <motion.h2
+                    initial="hidden"
+                    variants={floatUpVariants}
+                    transition={{ duration: 1 }}
+                    ref={extendedAboutMe}
+                    animate={extendedAboutMeInView ? "visible" : "hidden"}
+                  >
+                    <Typography variant="h2" className="subheader">
+                      About Me
+                    </Typography>
+                  </motion.h2>
+                </Box>
               </Box>
-            </Box>
-            <Box className="extended-about">
-              {/* <Box className="extended-about-me-text-header" sx={{}}>
-                <motion.h2
-                  initial="hidden"
-                  variants={floatUpVariants}
-                  transition={{ duration: 1 }}
-                  ref={extendedAboutMe}
-                  animate={extendedAboutMeInAction ? "visible" : "hidden"}
-                >
-                  <Typography variant="h2" className="subheader">
-                    About Me
-                  </Typography>
-                </motion.h2>
-              </Box> */}
-            </Box>
+            )}
             <Box className="contact"></Box>
           </Box>
         </Box>
