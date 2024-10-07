@@ -41,6 +41,10 @@ const floatInFromLeftVariants = {
 function App() {
   const [projects, setProjects] = useState([]);
   const [inViewProjects, setInViewProjects] = useState({});
+  const [experienceText, setExperienceText] = useState(
+    <Box margin="30px"></Box>
+  );
+  const [buttonsVisible, setButtonsVisible] = useState(false);
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -112,12 +116,15 @@ function App() {
     threshold: 0.5,
   });
 
-  const [experienceDetails, experienceDetailsInView] = useInView({
+  const [expButtonsRef, expButtonsRefInView] = useInView({
     triggerOnce: true,
-    threshold: 0.5,
+    threshold: 1.0,
+  });
+  const [expDesc, expDescInView] = useInView({
+    triggerOnce: true,
+    threshold: 1.0,
   });
 
-  const reactTypedRefDescription = useRef(null);
   const [startTyping, setStartTyping] = useState(false);
 
   return (
@@ -371,28 +378,159 @@ function App() {
                 </Typography>
               </motion.h2>
             </Box>
-            <Box sx={{ marginTop: "25px" }}>
-              <Typography
-                variant="p"
-                className="desc-subheader-text"
+            <Box
+              className="experience-div"
+              component="section"
+              sx={{
+                marginTop: "25px",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <Box sx={{ height: "80px", maxWidth: "80%" }}>
+                <Typography
+                  variant="p"
+                  className="desc-subheader-text"
+                  sx={{
+                    whiteSpace: "normal",
+                  }}
+                >
+                  {startTyping && (
+                    <ReactTyped
+                      strings={[
+                        "I’m always diving into tech, soaking up everything from full-stack development to machine learning, data science, and product. Tech is my playground, and I’m stoked to keep making things smarter and better for everyone.",
+                      ]}
+                      typeSpeed={1}
+                      loop={false}
+                      showCursor={false}
+                      onComplete={() => setButtonsVisible(true)}
+                    />
+                  )}
+                </Typography>
+              </Box>
+              {buttonsVisible && (
+                <Box
+                  component="section"
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-evenly",
+                    marginTop: "20px",
+                    width: "75%",
+                  }}
+                  className="tabs"
+                >
+                  <motion.button
+                    ref={expButtonsRef}
+                    // initial="hidden"
+                    animate={expButtonsRefInView ? "visible" : "hidden"}
+                    variants={floatUpVariants}
+                    transition={{ duration: 1 }}
+                    sx={{}}
+                  >
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      // initial="hidden"
+                      onClick={() =>
+                        setExperienceText(
+                          <ul>
+                            <li>
+                              <span>August 2024 - Current</span>
+                              <br />
+                              Software Engineer @ Lantern (Series A)
+                            </li>
+                            <br />
+                            <li>
+                              <span>July 2022 - August 2024</span>
+                              <br />
+                              Software Engineer @ General Motors
+                            </li>
+                            <br />
+                            <li>
+                              <span>July 2023 - December 2023</span>
+                              <br />
+                              Technical Product Owner @ General Motors
+                            </li>
+                            <br />
+                            <li>
+                              <span>June 2021 - August 2021</span>
+                              <br />
+                              Data Analytics Intern @ Discover Financial
+                              Services
+                            </li>
+                          </ul>
+                        )
+                      }
+                    >
+                      Work Experience
+                    </Button>
+                  </motion.button>
+                  <motion.button
+                    ref={expButtonsRef}
+                    // initial="hidden"
+                    animate={expButtonsRefInView ? "visible" : "hidden"}
+                    variants={floatUpVariants}
+                    transition={{ duration: 1 }}
+                    sx={{}}
+                  >
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      // initial="hidden"
+                      onClick={() =>
+                        setExperienceText(
+                          <ul>
+                            <li>
+                              <span>January 2023 - August 2024</span>
+                              <br />
+                              Master of Science in Computer Science | Stevens
+                              Institute of Technology
+                            </li>
+                            <br />
+                            <li>
+                              <span>September 2018 - May 2022</span>
+                              <br />
+                              Business Analytics & Information Technology |
+                              Rutgers University - New Brunswick
+                            </li>
+                            <br />
+                            <li>
+                              <span>September 2018 - May 2022</span>
+                              <br />
+                              Finance | Rutgers University - New Brunswick
+                            </li>
+                          </ul>
+                        )
+                      }
+                    >
+                      Education History
+                    </Button>
+                  </motion.button>
+                </Box>
+              )}
+              <Box
                 sx={{
-                  whiteSpace: "normal",
-                  maxWidth: "300px",
-                  height: "25px",
+                  marginTop: "30px",
+                  height: "100px",
+                  marginBottom: "15px",
                 }}
               >
-                {startTyping && (
-                  <ReactTyped
-                    strings={[
-                      "I’m always diving into tech, soaking up everything from full-stack development to machine learning, data science, and product. Tech is my playground, and I’m stoked to keep making things smarter and better for everyone.",
-                    ]}
-                    typeSpeed={7}
-                    loop={false}
-                    showCursor={false}
-                  />
-                )}
-              </Typography>
+                <motion.p
+                  // initial="hidden"
+                  ref={expDesc}
+                  animate={expDescInView ? "visible" : "hidden"}
+                  variants={floatUpVariants}
+                  transition={{ duration: 1 }}
+                >
+                  <p>
+                    <Typography component="body">{experienceText}</Typography>
+                  </p>
+                </motion.p>
+              </Box>
             </Box>
+            <Box className="extended-about"></Box>
+            <Box className="contact"></Box>
           </Box>
         </Box>
         <footer className="footer">
