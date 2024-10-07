@@ -124,6 +124,10 @@ function App() {
     triggerOnce: true,
     threshold: 1.0,
   });
+  const [extendedAboutMe, extendedAboutMeInAction] = useInView({
+    triggerOnce: true,
+    threshold: 1.0,
+  });
 
   const [startTyping, setStartTyping] = useState(false);
 
@@ -436,25 +440,33 @@ function App() {
                         setExperienceText(
                           <ul>
                             <li>
-                              <span>August 2024 - Current</span>
+                              <span style={{ color: "white" }}>
+                                August 2024 - Current
+                              </span>
                               <br />
                               Software Engineer @ Lantern (Series A)
                             </li>
                             <br />
                             <li>
-                              <span>July 2022 - August 2024</span>
+                              <span style={{ color: "white" }}>
+                                July 2022 - August 2024
+                              </span>
                               <br />
                               Software Engineer @ General Motors
                             </li>
                             <br />
                             <li>
-                              <span>July 2023 - December 2023</span>
+                              <span style={{ color: "white" }}>
+                                July 2023 - December 2023
+                              </span>
                               <br />
                               Technical Product Owner @ General Motors
                             </li>
                             <br />
                             <li>
-                              <span>June 2021 - August 2021</span>
+                              <span style={{ color: "white" }}>
+                                June 2021 - August 2021
+                              </span>
                               <br />
                               Data Analytics Intern @ Discover Financial
                               Services
@@ -482,21 +494,27 @@ function App() {
                         setExperienceText(
                           <ul>
                             <li>
-                              <span>January 2023 - August 2024</span>
+                              <span style={{ color: "white" }}>
+                                January 2023 - August 2024
+                              </span>
                               <br />
                               Master of Science in Computer Science | Stevens
                               Institute of Technology
                             </li>
                             <br />
                             <li>
-                              <span>September 2018 - May 2022</span>
+                              <span style={{ color: "white" }}>
+                                September 2018 - May 2022
+                              </span>
                               <br />
                               Business Analytics & Information Technology |
                               Rutgers University - New Brunswick
                             </li>
                             <br />
                             <li>
-                              <span>September 2018 - May 2022</span>
+                              <span style={{ color: "white" }}>
+                                September 2018 - May 2022
+                              </span>
                               <br />
                               Finance | Rutgers University - New Brunswick
                             </li>
@@ -529,7 +547,21 @@ function App() {
                 </motion.p>
               </Box>
             </Box>
-            <Box className="extended-about"></Box>
+            <Box className="extended-about">
+              {/* <Box className="extended-about-me-text-header" sx={{}}>
+                <motion.h2
+                  initial="hidden"
+                  variants={floatUpVariants}
+                  transition={{ duration: 1 }}
+                  ref={extendedAboutMe}
+                  animate={extendedAboutMeInAction ? "visible" : "hidden"}
+                >
+                  <Typography variant="h2" className="subheader">
+                    About Me
+                  </Typography>
+                </motion.h2>
+              </Box> */}
+            </Box>
             <Box className="contact"></Box>
           </Box>
         </Box>
