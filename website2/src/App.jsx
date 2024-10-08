@@ -38,6 +38,14 @@ const floatInFromLeftVariants = {
   visible: { opacity: 1, x: 0 },
 };
 
+function alternateColors(text) {
+  return text.split("").map((char, index) => (
+    <span key={index} style={{ color: index % 2 === 0 ? "blue" : "orange" }}>
+      {char}
+    </span>
+  ));
+}
+
 function App() {
   const [projects, setProjects] = useState([]);
   const [inViewProjects, setInViewProjects] = useState({});
@@ -152,6 +160,11 @@ function App() {
   const [extendedAboutMe, extendedAboutMeInView] = useInView({
     triggerOnce: true,
     threshold: 1.0,
+  });
+
+  const [extendedAboutMeP, extendedAboutMePInView] = useInView({
+    triggerOnce: true,
+    threshold: 0.5,
   });
 
   const [startTyping, setStartTyping] = useState(false);
@@ -426,6 +439,7 @@ function App() {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
+                height: "600px",
               }}
             >
               <Box sx={{ height: "80px", maxWidth: "80%" }}>
@@ -462,7 +476,7 @@ function App() {
                 >
                   <motion.button
                     ref={expButtonsRef}
-                    // initial="hidden"
+                    initial="hidden"
                     animate={expButtonsRefInView ? "visible" : "hidden"}
                     variants={floatUpVariants}
                     transition={{ duration: 1 }}
@@ -516,7 +530,7 @@ function App() {
                   </motion.button>
                   <motion.button
                     ref={expButtonsRef}
-                    // initial="hidden"
+                    initial="hidden"
                     animate={expButtonsRefInView ? "visible" : "hidden"}
                     variants={floatUpVariants}
                     transition={{ duration: 1 }}
@@ -570,13 +584,14 @@ function App() {
                     marginTop: "30px",
                     marginBottom: "150px",
                   }}
+                  className="experience-p"
                 >
                   <motion.p
-                    // initial="hidden"
+                    initial="hidden"
                     ref={expDesc}
                     animate={expDescInView ? "visible" : "hidden"}
                     variants={floatUpVariants}
-                    transition={{ duration: 1 }}
+                    transition={{ duration: 1, delay: 0.5 }}
                     onAnimationComplete={() => setExpDescVisible(true)}
                   >
                     <p>
@@ -586,8 +601,8 @@ function App() {
                 </Box>
               )}
             </Box>
-            {buttonsVisible && expDescVisible && (
-              <Box className="extended-about" sx={{}}>
+            <Box className="extended-about" sx={{}}>
+              {buttonsVisible && expDescVisible && (
                 <Box className="extended-about-me-text-header" sx={{}}>
                   <motion.h2
                     initial="hidden"
@@ -601,8 +616,54 @@ function App() {
                     </Typography>
                   </motion.h2>
                 </Box>
+              )}
+              <Box
+                className="extender-about-me-text"
+                sx={{
+                  maxWidth: "80%",
+                }}
+              >
+                <motion.p
+                  initial="hidden"
+                  variants={floatUpVariants}
+                  transition={{ duration: 1 }}
+                  ref={extendedAboutMeP}
+                  animate={extendedAboutMePInView ? "visible" : "hidden"}
+                >
+                  <p>
+                    <Typography
+                      variant="p"
+                      className="subheader"
+                      style={{ fontSize: "14px" }}
+                    >
+                      Hi! As you know by now, my name is Jay Patel and I am a
+                      Software Engineer. Software is my passion and I love to
+                      build projects simply for fun, and I am currently in the
+                      mix of making two of my major projects. Currently, I work
+                      for a Series A B2B SaaS startup based in New York City
+                      called Lantern, and here I primarily work with TypeScript
+                      and JavaScript for both frontend and backend. While our
+                      frontend is mostly React, our backend is Node.js, and
+                      these are two frameworks that I love to work with. At
+                      Lantern, I primarily deal with engineering client-side
+                      products, sometimes uniquely creating workflows for
+                      individual businesses, and sometimes creating new features
+                      that directly impact the customer. When I am not working
+                      on engineering, some of my favorite hobbies include
+                      weightlifting, watching
+                      {alternateColors(" Knicks")} basketball, playing with my
+                      lovely pet Corgi, and spending time with friends and
+                      family. This is actually my second portfolio website, and
+                      it is made entirely with React, while my first one was
+                      just HTML, CSS, and Vanilla JavaScript. This website's
+                      theme is based on a retro space invaders vibe, and I
+                      really hope you like it as much as I do.
+                    </Typography>
+                  </p>
+                </motion.p>
               </Box>
-            )}
+            </Box>
+
             <Box className="contact"></Box>
           </Box>
         </Box>
