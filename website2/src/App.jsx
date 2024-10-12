@@ -10,6 +10,7 @@ import CustomCursor from "./components/cursor.jsx";
 import profilePic from "./assets/profile-pic.png";
 import TechnologyGrid from "./components/GridComponent";
 import CustomComponent from "./components/ProjectComponent";
+import ContactComponent from "./components/contactComponent";
 import { getGitDetails } from "./services/getGitDetails.js";
 const theme = createTheme({
   palette: {
@@ -601,7 +602,7 @@ function App() {
                 </Box>
               )}
             </Box>
-            <Box className="extended-about" sx={{}}>
+            <Box className="extended-about" sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
               {buttonsVisible && expDescVisible && (
                 <Box className="extended-about-me-text-header" sx={{}}>
                   <motion.h2
@@ -664,7 +665,9 @@ function App() {
               </Box>
             </Box>
 
-            <Box className="contact"></Box>
+            <Box className="contact">
+              <ContactComponent />
+            </Box>
           </Box>
         </Box>
         <footer className="footer">

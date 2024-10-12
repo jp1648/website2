@@ -1,6 +1,5 @@
 import axios from "axios";
 
-// GitHub Personal Access Token (optional, but recommended to avoid rate limits)
 const token = import.meta.env.VITE_GITHUB_TOKEN; // Optional, only for private repositories or rate-limited requests
 const username = "jp1648"; // Replace with the GitHub account username
 
